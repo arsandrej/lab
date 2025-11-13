@@ -6,7 +6,7 @@ import mk.ukim.finki.wp.lab.service.BookReservationService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BookReservationServiceImpl implements BookReservationService {
+public class BookReservationServiceImpl implements BookReservationService{
     private final BookReservationRepository bookReservationRepository;
 
     public BookReservationServiceImpl(BookReservationRepository bookReservationRepository) {
@@ -15,7 +15,7 @@ public class BookReservationServiceImpl implements BookReservationService {
 
     @Override
     public BookReservation placeReservation(String bookTitle, String readerName, String readerAddress, int numberOfCopies) {
-        BookReservation bookReservation = new BookReservation(bookTitle, readerName, readerAddress, numberOfCopies);
-        return bookReservationRepository.save(bookReservation);
+        BookReservation r= new BookReservation(bookTitle,readerName,readerAddress, numberOfCopies);
+        return  bookReservationRepository.save(r);
     }
 }

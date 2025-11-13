@@ -1,12 +1,23 @@
 package mk.ukim.finki.wp.lab.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter @AllArgsConstructor
+@Data
+@AllArgsConstructor
 public class Book {
-    private String title;
-    private String genre;
-    private double averageRating;
+    private static long counter = 0;
+    private Long id;
+    String title;
+    String genre;
+    double averageRating;
+    private Author author;
+
+    public Book(String title, String genre, double averageRating, Author author) {
+        this.title = title;
+        this.genre = genre;
+        this.averageRating = averageRating;
+        this.author = author;
+        this.id = counter++;
+    }
 }

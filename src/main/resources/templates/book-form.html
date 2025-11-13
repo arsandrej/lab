@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Book</title>
+</head>
+<body>
+<h2 th:text="${book != null ? 'Edit Book' : 'Add a New Book'}">Add a New Book</h2>
+
+<form th:action="@{${book == null ?'/books/add' :'/books/edit/' + book.id  }}" method="post">
+    <label for="title">Title:</label><br>
+    <input type="text"
+           id="title"
+           name="title"
+           th:value="${book != null ? book.title : ''}"
+           required><br><br>
+
+    <label for="genre">Genre:</label><br>
+    <input type="text"
+           id="genre"
+           name="genre"
+           th:value="${book != null ? book.genre : ''}"
+           required><br><br>
+
+    <label for="averageRating">Average Rating:</label><br>
+    <input type="number"
+           id="averageRating"
+           name="averageRating"
+           step="0.1"
+           min="0"
+           max="10"
+           th:value="${book != null ? book.averageRating : ''}"
+           required><br><br>
+
+    <label for="authorId">Author:</label><br>
+    <select id="authorId" name="authorId" required>
+        <option value="">Select author</option>
+        <option th:each="author : ${authors}"
+                th:value="${author.id}"
+                th:text="${author.name + ' ' + author.surname}"
+                th:selected="${book != null && book.author!=null && book.author==author}">
+        </option>
+    </select><br><br>
+
+    <button type="submit" th:text="${book != null ? 'Save Changes' : 'Add'}">Add</button>
+</form>
+
+</body>
+</html>
