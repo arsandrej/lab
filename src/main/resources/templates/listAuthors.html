@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Book Reservation - Welcome and choose a Book</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .book-option {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .book-option:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Book Reservation App</h1>
+</header>
+<main>
+
+    <form >
+        <h2>Authors:</h2>
+        <div th:each="author : ${authors}">
+            <label>
+                <input type="radio" name="Author" th:value="${author.name}" required>
+                Surname: <span th:text="${author.surname}"></span>,
+                Country: <span th:text="${author.country}"></span>,
+                Bio: <span th:text="${author.biography}"></span>
+                Gender: <span th:text="${author.gender}"></span>
+            </label>
+            <th:block>
+                <a th:href="@{'/authors/edit/{id}' (id=${author.getId()})}">
+                    <button type="button">Edit</button>
+                </a>
+            </th:block>
+            <th:block>
+                <a th:href="@{'/authors/delete/{id}' (id=${author.getId()})}">
+                    <button type="button">Delete</button>
+                </a>
+            </th:block>
+        </div>
+    </form>
+
+    <form action="/authors/add-form" method="get">
+        <button type="submit">Add Author</button>
+    </form>
+
+</main>
+</body>
+</html>

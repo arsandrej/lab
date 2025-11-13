@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Author</title>
+</head>
+<body>
+<h2 th:text="${author != null ? 'Edit Author' : 'Add a New Author'}">Add a New Author</h2>
+
+<form th:action="@{${author == null ?'/authors/add' :'/authors/edit/' + author.id  }}" method="post">
+    <label for="name">Name:</label><br>
+    <input type="text"
+           id="name"
+           name="name"
+           th:value="${author != null ? author.name : ''}"
+           required><br><br>
+
+
+    <label for="surname">Surname:</label><br>
+    <input type="text"
+           id="surname"
+           name="surname"
+           th:value="${author != null ? author.surname : ''}"
+           required><br><br>
+
+    <label for="country">Country:</label><br>
+    <input type="text"
+           id="country"
+           name="country"
+           step="0.1"
+           min="0"
+           max="10"
+           th:value="${author != null ? author.country : ''}"
+           required><br><br>
+
+    <label for="biography">Biography:</label><br>
+    <input type="text"
+           id="biography"
+           name="biography"
+           step="0.1"
+           min="0"
+           max="10"
+           th:value="${author != null ? author.biography : ''}"
+           required><br><br>
+
+    <label for="gender">Gender:</label><br>
+    <select id="gender" name="gender" required>
+        <option value="">Select Gender:</option>
+        <option th:each="gen : ${Gender}"
+                th:value="${gen}"
+                th:text="${gen}"
+                th:selected="${author != null && author.gender!=null && author.gender==gen}">
+        </option>
+    </select><br><br>
+
+    <button type="submit" th:text="${author != null ? 'Save Changes' : 'Add'}">Add</button>
+</form>
+
+</body>
+</html>
