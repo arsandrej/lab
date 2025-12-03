@@ -25,6 +25,8 @@ public class BookController {
     public String getBooksPage(@RequestParam(required = false) String error, Model model){
         List<Book> books= bookService.listAll();
         model.addAttribute("books", books);
+        List<Author> authors= authorService.findAll();
+        model.addAttribute("authors", authors);
         return "listBooks";
     }
 
@@ -80,6 +82,27 @@ public class BookController {
             books = bookService.listAll();
         }
         model.addAttribute("books", books);
+        List<Author> authors= authorService.findAll();
+        model.addAttribute("authors", authors);
         return "listBooks";
     }
+    @PostMapping("/searchAuthor")
+    public String searchBooksByAuthor(@RequestParam(name = "authorId", required = false) Long authorId,
+                                      Model model) {
+        List<Book> books;
+
+        if (authorId == null || authorId == 1234567891) {
+            books = bookService.listAll();
+        } else {
+            books = bookService.findAllByAuthorId(authorId);
+        }
+
+        model.addAttribute("books", books);
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("selectedAuthorId", authorId);
+
+        return "listBooks";
+    }
+
+
 }
