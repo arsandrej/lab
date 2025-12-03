@@ -25,6 +25,8 @@ public class BookController {
     public String getBooksPage(@RequestParam(required = false) String error, Model model){
         List<Book> books= bookService.listAll();
         model.addAttribute("books", books);
+        List<Author> authors= authorService.findAll();
+        model.addAttribute("authors", authors);
         return "listBooks";
     }
 
@@ -40,10 +42,8 @@ public class BookController {
                            @RequestParam String genre,
                            @RequestParam Double averageRating,
                            @RequestParam Long authorId){
-        Author author=authorService.findById(authorId);
 
-        Book newBook= new Book(title,genre,averageRating,author);
-        bookService.save(newBook.getId(), title,genre,averageRating,author);
+        bookService.save(title,genre,averageRating,authorId);
         return "redirect:../books";
     }
 
@@ -60,8 +60,8 @@ public class BookController {
                              @RequestParam String genre,
                              @RequestParam Double averageRating,
                              @RequestParam Long authorId){
-        Author author=authorService.findById(authorId);
-        bookService.update(bookId,title,genre,averageRating,author);
+        Author author = authorService.findById(authorId);
+        bookService.update(bookId,title,genre,averageRating,authorId);
         return "redirect:../../books";
     }
 
@@ -82,6 +82,27 @@ public class BookController {
             books = bookService.listAll();
         }
         model.addAttribute("books", books);
+        List<Author> authors= authorService.findAll();
+        model.addAttribute("authors", authors);
         return "listBooks";
     }
+    @PostMapping("/searchAuthor")
+    public String searchBooksByAuthor(@RequestParam(name = "authorId", required = false) Long authorId,
+                                      Model model) {
+        List<Book> books;
+
+        if (authorId == null || authorId == 1234567891) {
+            books = bookService.listAll();
+        } else {
+            books = bookService.findAllByAuthorId(authorId);
+        }
+
+        model.addAttribute("books", books);
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("selectedAuthorId", authorId);
+
+        return "listBooks";
+    }
+
+
 }
