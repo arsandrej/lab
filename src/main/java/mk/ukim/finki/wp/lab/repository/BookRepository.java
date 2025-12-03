@@ -1,15 +1,21 @@
 package mk.ukim.finki.wp.lab.repository;
 
-import mk.ukim.finki.wp.lab.model.Author;
 import mk.ukim.finki.wp.lab.model.Book;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface BookRepository {
-    List<Book> findAll();
-    List<Book> searchBooks(String text, Double rating);
-    Book save(Long id,String title, String genre, double averageRating, Author author);
-    Book getById(Long id);
-    Book delete(Book book);
+@Repository
+public interface BookRepository extends JpaRepository<Book, Long> {
 
+    List<Book> findAllByAuthor_Id(Long authorId);
+
+    // За search функционалноста (наслов или жанр + рејтинг)
+    List<Book> findByTitleContainingIgnoreCaseOrGenreContainingIgnoreCaseAndAverageRatingGreaterThanEqual(
+            String title, String genre, Double rating
+    );
+
+    // Ако не се внесе рејтинг, само по текст
+    List<Book> findByTitleContainingIgnoreCaseOrGenreContainingIgnoreCase(String title, String genre);
 }
