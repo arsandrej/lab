@@ -4,7 +4,9 @@ import mk.ukim.finki.wp.lab.model.Author;
 import mk.ukim.finki.wp.lab.model.Book;
 import mk.ukim.finki.wp.lab.repository.AuthorRepository;
 import mk.ukim.finki.wp.lab.repository.BookRepository;
+import mk.ukim.finki.wp.lab.repository.specifications.BookSpecification;
 import mk.ukim.finki.wp.lab.service.BookService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +37,34 @@ public class BookServiceImpl implements BookService {
         } else {
             return bookRepository.findByTitleContainingIgnoreCaseOrGenreContainingIgnoreCaseAndAverageRatingGreaterThanEqual(text, text, rating);
         }
+    }
+
+    @Override
+    public List<Book> searchBooksAdvanced(String text, Double rating) {
+        Specification<Book> spec = null;
+
+        Specification<Book> textSpec = BookSpecification.titleOrGenreContains(text);
+
+        Specification<Book> ratingSpec = BookSpecification.averageRatingGreaterThanEqual(rating);
+
+            // Case 1: Only text
+        if (textSpec != null && ratingSpec == null) {
+            spec = textSpec;
+            // Case 2: Only rating
+        } else if (textSpec == null && ratingSpec != null) {
+            spec = ratingSpec;
+            // Case 3: Both text AND rating
+        } else if (textSpec != null && ratingSpec != null) {
+            spec = textSpec.and(ratingSpec);
+        }
+
+            // Case 4: Neither text nor rating
+        if (spec == null) {
+            return listAll();
+        }
+
+        // Method which executes the query.
+        return bookRepository.findAll(spec);
     }
 
     @Override

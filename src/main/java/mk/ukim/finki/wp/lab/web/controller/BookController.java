@@ -71,6 +71,7 @@ public class BookController {
         return "redirect:../../books";
 
     }
+
     @PostMapping("/search")
     public String searchBooks(@RequestParam(required = false) String text,
                               @RequestParam(required = false) Double rating,
@@ -86,6 +87,19 @@ public class BookController {
         model.addAttribute("authors", authors);
         return "listBooks";
     }
+
+    @PostMapping("/searchAdvanced")
+    public String searchBooksAdvanced(@RequestParam(required = false) String text,
+                              @RequestParam(required = false) Double rating,
+                              Model model) {
+
+        List<Book> books = bookService.searchBooksAdvanced(text, rating);
+        model.addAttribute("books", books);
+        List<Author> authors= authorService.findAll();
+        model.addAttribute("authors", authors);
+        return "listBooks";
+    }
+
     @PostMapping("/searchAuthor")
     public String searchBooksByAuthor(@RequestParam(name = "authorId", required = false) Long authorId,
                                       Model model) {
@@ -103,6 +117,5 @@ public class BookController {
 
         return "listBooks";
     }
-
 
 }

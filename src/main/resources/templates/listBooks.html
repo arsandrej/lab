@@ -40,6 +40,14 @@
         <input type="number" name="rating" min="0" max="10" step="0.1" placeholder="e.g. 7.5" />
         <input type="submit" value="Search">
     </form>
+    <form action="/books/searchAdvanced" method="POST">
+        <h2>Search Books Advanced</h2>
+        <label>Search by title or keyword:</label>
+        <input type="text" name="text" placeholder="Enter keyword" />
+        <label>Minimum rating:</label>
+        <input type="number" name="rating" min="0" max="10" step="0.1" placeholder="e.g. 7.5" />
+        <input type="submit" value="Search">
+    </form>
     <form action="/books/searchAuthor" method="POST">
         <h2>Search Author</h2>
         <select id="authorId" name="authorId" required>
