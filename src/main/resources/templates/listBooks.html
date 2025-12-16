@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <title>Book Reservation - Welcome and choose a Book</title>
@@ -27,9 +29,10 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>Welcome to our Book Reservation App</h1>
-</header>
+<!--<header>-->
+<!--    <h1>Welcome to our Book Reservation App</h1>-->
+<!--</header>-->
+<div th:replace="fragments/header :: header"></div>
 <main>
 
     <form action="/books/search" method="POST">
@@ -53,7 +56,7 @@
         </select>
         <input type="submit" value="Search">
     </form>
-    <form action="/bookReservation" method="POST">
+    <form action="/bookReservation" method="POST" sec:authorize="isAuthenticated()">
         <h2>Choose a book:</h2>
         <div th:each="book : ${books}" class="book-option">
             <label>
@@ -63,16 +66,18 @@
                 Rating: <span th:text="${book.averageRating}"></span>
                 Author: <span th:text="${book.getAuthor().getName()}"></span><span th:text="${book.getAuthor().getSurname()}"></span>
             </label>
-            <th:block>
-                <a th:href="@{'/books/edit/{id}' (id=${book.getId()})}">
-                    <button type="button">Edit</button>
-                </a>
-            </th:block>
-            <th:block>
-                <a th:href="@{'/books/delete/{id}' (id=${book.getId()})}">
-                   <button type="button">Delete</button>
-                </a>
-            </th:block>
+            <div sec:authorize="hasRole('ADMIN')">
+                <th:block>
+                    <a th:href="@{'/books/edit/{id}' (id=${book.getId()})}">
+                        <button type="button">Edit</button>
+                    </a>
+                </th:block>
+                <th:block>
+                    <a th:href="@{'/books/delete/{id}' (id=${book.getId()})}">
+                        <button type="button">Delete</button>
+                    </a>
+                </th:block>
+            </div>
         </div>
 
         <h2>Enter your information:</h2>
@@ -87,7 +92,7 @@
         <input type="submit" value="Reserve Book">
     </form>
 
-    <form action="/books/add-form" method="get">
+    <form action="/books/add-form" method="get" sec:authorize="hasRole('ADMIN')">
         <button type="submit">Add Book</button>
     </form>
 
